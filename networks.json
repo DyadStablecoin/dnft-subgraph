@@ -1,0 +1,8 @@
+{
+  "goerli": {
+    "DNft": {
+      "address": "0x8f49F321CB37A2313b7880A8A6495A8741Fdd23A",
+      "startBlock": 9285482
+    }
+  }
+}

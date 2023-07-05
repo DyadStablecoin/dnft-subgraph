@@ -1,0 +1,42 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: DNft
+    network: goerli
+    source:
+      address: "0x8f49F321CB37A2313b7880A8A6495A8741Fdd23A"
+      abi: DNft
+      startBlock: 9285482
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Approval
+        - ApprovalForAll
+        - Drained
+        - MintedInsiderNft
+        - MintedNft
+        - OwnershipTransferred
+        - Transfer
+      abis:
+        - name: DNft
+          file: ./abis/DNft.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,indexed uint256)
+          handler: handleApproval
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: Drained(indexed address,uint256)
+          handler: handleDrained
+        - event: MintedInsiderNft(indexed uint256,indexed address)
+          handler: handleMintedInsiderNft
+        - event: MintedNft(indexed uint256,indexed address)
+          handler: handleMintedNft
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/d-nft.ts
