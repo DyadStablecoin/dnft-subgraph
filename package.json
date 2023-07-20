@@ -4,10 +4,10 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ DyadStablecoin/dnft-subgraph",
-    "create-local": "graph create --node http://localhost:8020/ DyadStablecoin/dnft-subgraph",
-    "remove-local": "graph remove --node http://localhost:8020/ DyadStablecoin/dnft-subgraph",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 DyadStablecoin/dnft-subgraph",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ dyadstablecoin/dnft",
+    "create-local": "graph create --node http://localhost:8020/ dyadstablecoin/dnft",
+    "remove-local": "graph remove --node http://localhost:8020/ dyadstablecoin/dnft",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 dyadstablecoin/dnft",
     "test": "graph test"
   },
   "dependencies": {
