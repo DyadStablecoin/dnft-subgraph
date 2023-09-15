@@ -1,3 +1,5 @@
+import { BigInt, Bytes } from "@graphprotocol/graph-ts";
+
 import {
   Approval as ApprovalEvent,
   ApprovalForAll as ApprovalForAllEvent,
@@ -10,15 +12,32 @@ import {
 import {
   Approval,
   ApprovalForAll,
+  DNft,
   Drained,
   MintedInsiderNft,
   MintedNft,
   OwnershipTransferred,
   Transfer
 } from "../generated/schema";
+import { ensureUser } from "./user";
+
+export function createDnft(
+  tokenId: BigInt,
+  ownerAddress: Bytes,
+  mint: Bytes
+): DNft {
+  const owner = ensureUser(ownerAddress);
+  const id = tokenId.toString();
+  const dnft = new DNft(id);
+  dnft.tokenId = tokenId;
+  dnft.owner = owner.id;
+  dnft.mint = mint;
+  dnft.save();
+  return dnft;
+}
 
 export function handleApproval(event: ApprovalEvent): void {
-  let entity = new Approval(
+  const entity = new Approval(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
   entity.owner = event.params.owner;
@@ -33,7 +52,7 @@ export function handleApproval(event: ApprovalEvent): void {
 }
 
 export function handleApprovalForAll(event: ApprovalForAllEvent): void {
-  let entity = new ApprovalForAll(
+  const entity = new ApprovalForAll(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
   entity.owner = event.params.owner;
@@ -48,7 +67,7 @@ export function handleApprovalForAll(event: ApprovalForAllEvent): void {
 }
 
 export function handleDrained(event: DrainedEvent): void {
-  let entity = new Drained(
+  const entity = new Drained(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
   entity.to = event.params.to;
@@ -62,7 +81,7 @@ export function handleDrained(event: DrainedEvent): void {
 }
 
 export function handleMintedInsiderNft(event: MintedInsiderNftEvent): void {
-  let entity = new MintedInsiderNft(
+  const entity = new MintedInsiderNft(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
   entity.DNft_id = event.params.id;
@@ -73,10 +92,12 @@ export function handleMintedInsiderNft(event: MintedInsiderNftEvent): void {
   entity.transactionHash = event.transaction.hash;
 
   entity.save();
+
+  createDnft(event.params.id, event.params.to, entity.id);
 }
 
 export function handleMintedNft(event: MintedNftEvent): void {
-  let entity = new MintedNft(
+  const entity = new MintedNft(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
   entity.DNft_id = event.params.id;
@@ -88,12 +109,14 @@ export function handleMintedNft(event: MintedNftEvent): void {
   entity.transactionHash = event.transaction.hash;
 
   entity.save();
+
+  createDnft(event.params.id, event.params.to, entity.id);
 }
 
 export function handleOwnershipTransferred(
   event: OwnershipTransferredEvent
 ): void {
-  let entity = new OwnershipTransferred(
+  const entity = new OwnershipTransferred(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
   entity.user = event.params.user;
@@ -107,7 +130,7 @@ export function handleOwnershipTransferred(
 }
 
 export function handleTransfer(event: TransferEvent): void {
-  let entity = new Transfer(
+  const entity = new Transfer(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
   entity.from = event.params.from;
@@ -119,4 +142,6 @@ export function handleTransfer(event: TransferEvent): void {
   entity.transactionHash = event.transaction.hash;
 
   entity.save();
+
+  ensureUser(event.params.to);
 }

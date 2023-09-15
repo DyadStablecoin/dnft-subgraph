@@ -3,6 +3,10 @@
     "DNft": {
       "address": "0x8f49F321CB37A2313b7880A8A6495A8741Fdd23A",
       "startBlock": 9285482
+    },
+    "VaultManagerSLL": {
+      "address": "0xE5E5e2A4bA2454897a347FC11C0fCfaF647Cab20",
+      "startBlock": 9625773
     }
   }
 }

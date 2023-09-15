@@ -64,3 +64,22 @@ type Transfer @entity(immutable: true) {
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
+
+type DNft @entity(immutable: false) {
+  id: String!
+  tokenId: BigInt! # uint256
+  owner: User!
+  mint: MintedNft
+}
+
+type User @entity(immutable: false) {
+  id: Bytes! # user address
+  address: Bytes! # address
+  DNfts: [DNft!]! @derivedFrom(field: "owner")
+}
+
+type Vault @entity(immutable: false) {
+  id: Bytes! # vault address
+  isLicensed: Boolean! # bool
+  vaultManager: Bytes! # address
+}

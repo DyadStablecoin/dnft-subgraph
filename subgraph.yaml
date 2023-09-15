@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: DNft
-    network: mainnet
+    network: goerli
     source:
-      address: "0xdc400bbe0b8b79c07a962ea99a642f5819e3b712"
       abi: DNft
-      startBlock: 17733160
+      address: "0x8f49F321CB37A2313b7880A8A6495A8741Fdd23A"
+      startBlock: 9285482
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -21,6 +21,8 @@ dataSources:
         - MintedNft
         - OwnershipTransferred
         - Transfer
+        - DNft
+        - User
       abis:
         - name: DNft
           file: ./abis/DNft.json
@@ -40,3 +42,27 @@ dataSources:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
       file: ./src/d-nft.ts
+  - kind: ethereum
+    name: VaultManagerSLL
+    network: goerli
+    source:
+      abi: VaultManagerSLL
+      address: "0xE5E5e2A4bA2454897a347FC11C0fCfaF647Cab20"
+      startBlock: 9625773
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Vault
+      abis:
+        - name: VaultManagerSLL
+          file: ./abis/VaultManagerSLL.json
+        - name: Vault
+          file: ./abis/Vault.json
+      callHandlers:
+        - function: license(address)
+          handler: handleLicense
+        - function: removeLicense(address)
+          handler: handleRemoveLicense
+      file: ./src/vaultManagerSLL.ts
